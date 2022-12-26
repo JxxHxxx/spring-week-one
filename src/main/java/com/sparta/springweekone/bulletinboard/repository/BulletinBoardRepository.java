@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface BulletinBoardRepository extends JpaRepository<BulletinBoard, Long> {
 
-    List<BulletinBoard> findAllByoOrderBOrderByCreateAtDesc();
+    List<BulletinBoard> findAllByOrderByCreateAtDesc();
 }
