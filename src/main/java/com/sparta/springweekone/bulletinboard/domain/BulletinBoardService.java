@@ -1,5 +1,6 @@
 package com.sparta.springweekone.bulletinboard.domain;
 import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
+import com.sparta.springweekone.bulletinboard.dto.ResultDto;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -53,16 +54,17 @@ public class BulletinBoardService {
 
         return boardDto;
     }
-    public void delete(Long id, BulletinBoardDto bulletinBoardDto) {
+    public ResultDto delete(Long id, BulletinBoardDto bulletinBoardDto) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
         log.info("db password = {}", board.getPassword());
         log.info("input password = {}", bulletinBoardDto);
         if (isCorrectPassword(bulletinBoardDto, board)) {
             log.info("비밀 번호가 일치합니다. 게시글을 삭제합니다.");
             bulletinBoardRepository.deleteById(id);
-            return;
+            return new ResultDto(true);
         }
         log.info("비밀 번호가 일치하지 않습니다.");
+        return new ResultDto(false);
 
     }
     @Transactional
