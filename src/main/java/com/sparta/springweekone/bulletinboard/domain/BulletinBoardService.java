@@ -53,7 +53,7 @@ public class BulletinBoardService {
     public ResultDto delete(Long id, PasswordDto passwordDto) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
 
-        if (isNotCorrectPasswd(passwordDto, board)) {
+        if (isNotSame(passwordDto.getPassword(), board.getPassword())) {
             log.info("비밀 번호가 일치하지 않습니다.");
             return new ResultDto(false);
         }
@@ -65,10 +65,10 @@ public class BulletinBoardService {
 
 
     @Transactional
-    public BulletinBoardForm update(Long id, BulletinBoardForm bulletinBoardDto) {
-        BulletinBoard bulletinBoard = bulletinBoardRepository.findById(id).orElseThrow();
-        log.info("bulletinBoard = {}", bulletinBoard.toString());
-        if (!isCorrectPassword(bulletinBoardDto, bulletinBoard)) {
+    public BulletinBoardDto update(Long id, BulletinBoardForm boardForm) {
+        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
+        log.info("bulletinBoard = {}", board.toString());
+        if (isNotSame(boardForm.getPassword(), board.getPassword())) {
             return null;
         }
 
@@ -77,8 +77,8 @@ public class BulletinBoardService {
         return new BulletinBoardDto(board);
     }
 
-    private static boolean isCorrectPassword(BulletinBoardForm bulletinBoardDto, BulletinBoard board) {
-        return board.getPassword().equals(bulletinBoardDto.getPassword());
+    private static boolean isNotSame(String passwordOfDto, String passwordOfEntity) {
+        return !passwordOfEntity.equals(passwordOfDto);
     }
 
 }
