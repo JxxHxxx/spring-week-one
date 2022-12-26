@@ -45,8 +45,8 @@ public class BulletinBoardController {
     }
     // 선택 게시글 삭제
     @DeleteMapping("/bulletin-board/{id}")
-    public ResultDto remove(@PathVariable Long id, @RequestBody BulletinBoardForm bulletinBoardDto) {
-        ResultDto result = bulletinBoardService.delete(id, bulletinBoardDto);
+    public ResultDto remove(@PathVariable Long id, @RequestBody PasswordDto passwordDto) {
+        ResultDto result = bulletinBoardService.delete(id, passwordDto);
         return result;
     }
 }
