@@ -1,11 +1,9 @@
 package com.sparta.springweekone.bulletinboard.controller;
 
 import com.sparta.springweekone.bulletinboard.domain.BulletinBoardService;
-import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
-import com.sparta.springweekone.bulletinboard.dto.BulletinBoardForm;
-import com.sparta.springweekone.bulletinboard.dto.PasswordDto;
-import com.sparta.springweekone.bulletinboard.dto.ResultDto;
+import com.sparta.springweekone.bulletinboard.dto.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,10 +39,17 @@ public class BulletinBoardController {
     }
 
     // 선택 게시글 수정
+    @Deprecated
     @PatchMapping("/bulletin-board/{id}")
     public BulletinBoardDto update(@PathVariable Long id, @RequestBody BulletinBoardForm boardForm) {
         return bulletinBoardService.update(id, boardForm);
     }
+    // 선택 게시글 수정 버전2
+    @PatchMapping("/bulletin-board/v2/{id}")
+    public ResponseEntity<Message> updateV2(@PathVariable Long id, @RequestBody BulletinBoardForm boardForm) {
+        return bulletinBoardService.updateV2(id, boardForm);
+    }
+
     // 선택 게시글 삭제
     @DeleteMapping("/bulletin-board/{id}")
     public ResultDto remove(@PathVariable Long id, @RequestBody PasswordDto passwordDto) {
