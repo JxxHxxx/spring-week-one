@@ -20,7 +20,7 @@ public class BulletinBoardController {
 
     // 게시글 작성
     @PostMapping("/bulletin-board")
-    public BulletinBoardForm write(@RequestBody BulletinBoardForm boardForm) {
+    public BulletinBoardDto write(@RequestBody BulletinBoardForm boardForm) {
         log.info("BulletinBoardController - bulletin-board");
         log.info("dto {}", boardForm.getNickname());
         return bulletinBoardService.create(boardForm);
@@ -33,20 +33,18 @@ public class BulletinBoardController {
     }
     // 선택 게시글 조회
     @GetMapping("/bulletin-board/{id}")
-    public BulletinBoardForm read(@PathVariable Long id) {
+    public BulletinBoardDto readOne(@PathVariable Long id) {
         return bulletinBoardService.readOne(id);
     }
 
     // 선택 게시글 수정
     @PatchMapping("/bulletin-board/{id}")
-    public BulletinBoardForm update(@PathVariable Long id, @RequestBody BulletinBoardForm bulletinBoardDto) {
-        BulletinBoardForm update = bulletinBoardService.update(id, bulletinBoardDto);
-        return update;
+    public BulletinBoardDto update(@PathVariable Long id, @RequestBody BulletinBoardForm boardForm) {
+        return bulletinBoardService.update(id, boardForm);
     }
     // 선택 게시글 삭제
     @DeleteMapping("/bulletin-board/{id}")
     public ResultDto remove(@PathVariable Long id, @RequestBody PasswordDto passwordDto) {
-        ResultDto result = bulletinBoardService.delete(id, passwordDto);
-        return result;
+        return bulletinBoardService.delete(id, passwordDto);
     }
 }
