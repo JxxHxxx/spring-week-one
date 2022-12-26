@@ -20,12 +20,10 @@ public class BulletinBoardController {
 
     // 게시글 작성
     @PostMapping("/bulletin-board")
-    public BulletinBoardForm write(@RequestBody BulletinBoardForm bulletinBoardDto) {
+    public BulletinBoardForm write(@RequestBody BulletinBoardForm boardForm) {
         log.info("BulletinBoardController - bulletin-board");
-        log.info("dto {}", bulletinBoardDto.getNickname());
-        bulletinBoardService.create(bulletinBoardDto);
-
-        return bulletinBoardDto;
+        log.info("dto {}", boardForm.getNickname());
+        return bulletinBoardService.create(boardForm);
     }
 
     // 전체 게실글 조회
