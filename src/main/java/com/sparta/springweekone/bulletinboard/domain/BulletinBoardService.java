@@ -49,18 +49,20 @@ public class BulletinBoardService {
 
         return boardDto;
     }
-    public ResultDto delete(Long id, BulletinBoardForm bulletinBoardDto) {
+    public ResultDto delete(Long id, PasswordDto passwordDto) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
-        log.info("db password = {}", board.getPassword());
-        log.info("input password = {}", bulletinBoardDto);
-        if (isCorrectPassword(bulletinBoardDto, board)) {
-            log.info("비밀 번호가 일치합니다. 게시글을 삭제합니다.");
-            bulletinBoardRepository.deleteById(id);
-            return new ResultDto(true);
-        }
-        log.info("비밀 번호가 일치하지 않습니다.");
-        return new ResultDto(false);
 
+        if (isNotCorrectPasswd(passwordDto, board)) {
+            log.info("비밀 번호가 일치하지 않습니다.");
+            return new ResultDto(false);
+        }
+        log.info("비밀 번호가 일치합니다. 게시글을 삭제합니다.");
+        return new ResultDto(true);
+
+    }
+
+    private static boolean isNotCorrectPasswd(PasswordDto passwordDto, BulletinBoard board) {
+        return !board.getPassword().equals(passwordDto.getPassword());
     }
     @Transactional
     public BulletinBoardForm update(Long id, BulletinBoardForm bulletinBoardDto) {
