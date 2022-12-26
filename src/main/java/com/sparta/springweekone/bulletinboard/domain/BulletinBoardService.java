@@ -58,6 +58,7 @@ public class BulletinBoardService {
         if (isNotSame(passwordDto.getPassword(), board.getPassword())) {
             return new ResultDto(false);
         }
+        bulletinBoardRepository.deleteById(id);
         return new ResultDto(true);
 
     }
