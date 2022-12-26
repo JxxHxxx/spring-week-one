@@ -1,7 +1,9 @@
 package com.sparta.springweekone.bulletinboard.controller;
 
 import com.sparta.springweekone.bulletinboard.domain.BulletinBoardService;
+import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
 import com.sparta.springweekone.bulletinboard.dto.BulletinBoardForm;
+import com.sparta.springweekone.bulletinboard.dto.PasswordDto;
 import com.sparta.springweekone.bulletinboard.dto.ResultDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 public class BulletinBoardController {
 
     private final BulletinBoardService bulletinBoardService;
