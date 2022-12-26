@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @ToString
-public class BulletinBoard {
+public class BulletinBoard extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,6 @@ public class BulletinBoard {
     private String nickname;
     @Column(nullable = false)
     private String password;
-    @Column
-    private LocalDateTime datetime;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
@@ -33,7 +31,6 @@ public class BulletinBoard {
         this.password = password;
         this.title = title;
         this.mainText = mainText;
-        this.datetime = LocalDateTime.now();
     }
 
     public void update(BulletinBoardDto bulletinBoardDto) {
