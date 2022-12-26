@@ -27,10 +27,10 @@ public class BulletinBoard extends Timestamped {
 
 
     public BulletinBoard(BulletinBoardForm boardForm) {
-        this.nickname = boardForm.getNickname();
         this.password = boardForm.getPassword();
         this.nickname = boardForm.getNickname();
         this.mainText = boardForm.getMainText();
+        this.title = boardForm.getTitle();
     }
 
     public void update(BulletinBoardForm bulletinBoardDto) {
