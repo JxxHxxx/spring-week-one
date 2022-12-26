@@ -26,7 +26,7 @@ public class BulletinBoardController {
         return bulletinBoardService.create(boardForm);
     }
 
-    // 전체 게실글 조회
+    // 전체 게시글 조회
     @GetMapping("/bulletin-boards")
     public List<BulletinBoardDto> readAll() {
         return bulletinBoardService.readAll();
