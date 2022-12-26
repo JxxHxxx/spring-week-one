@@ -1,13 +1,15 @@
 package com.sparta.springweekone.bulletinboard.domain;
-import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
-import com.sparta.springweekone.bulletinboard.dto.BulletinBoardForm;
-import com.sparta.springweekone.bulletinboard.dto.PasswordDto;
-import com.sparta.springweekone.bulletinboard.dto.ResultDto;
+import com.sparta.springweekone.bulletinboard.dto.*;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -62,8 +64,6 @@ public class BulletinBoardService {
 
     }
 
-
-
     @Transactional
     public BulletinBoardDto update(Long id, BulletinBoardForm boardForm) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
@@ -75,6 +75,24 @@ public class BulletinBoardService {
         board.update(boardForm);
         log.info("bulletinBoard = {}", board.toString());
         return new BulletinBoardDto(board);
+    }
+
+    @Transactional
+    public ResponseEntity<Message> updateV2(Long id, BulletinBoardForm boardForm) {
+        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        if (isNotSame(boardForm.getPassword(), board.getPassword())) {
+            Message message = new Message(false, null);
+            return new ResponseEntity<>(message, headers, HttpStatus.UNAUTHORIZED);
+        }
+
+        board.update(boardForm);
+
+        Message message = new Message(true, new BulletinBoardDto(board));
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
     private static boolean isNotSame(String passwordOfDto, String passwordOfEntity) {
