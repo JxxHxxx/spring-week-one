@@ -29,19 +29,18 @@ public class BulletinBoardService {
         return boardForm;
 
     }
-    public List<BulletinBoardForm> readAll() {
-        Sort sort = Sort.by("datetime").descending();
-        List<BulletinBoard> boards = bulletinBoardRepository.findAll(sort);
+    public List<BulletinBoardDto> readAll() {
+//        Sort sort = Sort.by("modifiedAt").descending();
+//        List<BulletinBoard> boards = bulletinBoardRepository.findAll(sort);
 
-        ArrayList<BulletinBoardForm> bulletinBoardDtos = new ArrayList<>();
+        List<BulletinBoard> boards = bulletinBoardRepository.findAllByoOrderBOrderByCreateAtDesc();
+
+        ArrayList<BulletinBoardDto> boardDtoList = new ArrayList<>();
 
         Stream<BulletinBoard> stream = boards.stream();
-        stream.forEach(board -> bulletinBoardDtos.add(new BulletinBoardForm(
-                board.getTitle(),
-                board.getMainText(),
-                board.getNickname())));
+        stream.forEach(board -> boardDtoList.add(new BulletinBoardDto(board)));
 
-        return bulletinBoardDtos;
+        return boardDtoList;
     }
 
     public BulletinBoardForm readOne(Long id) {
