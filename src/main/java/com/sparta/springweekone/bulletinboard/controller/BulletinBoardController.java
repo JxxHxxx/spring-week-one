@@ -22,8 +22,6 @@ public class BulletinBoardController {
     // 게시글 작성
     @PostMapping("/bulletin-board")
     public BulletinBoardDto write(@RequestBody BulletinBoardForm boardForm) {
-        log.info("BulletinBoardController - bulletin-board");
-        log.info("dto {}", boardForm.getNickname());
         return bulletinBoardService.create(boardForm);
     }
 

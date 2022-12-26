@@ -56,24 +56,21 @@ public class BulletinBoardService {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
 
         if (isNotSame(passwordDto.getPassword(), board.getPassword())) {
-            log.info("비밀 번호가 일치하지 않습니다.");
             return new ResultDto(false);
         }
-        log.info("비밀 번호가 일치합니다. 게시글을 삭제합니다.");
         return new ResultDto(true);
 
     }
 
+    @Deprecated
     @Transactional
     public BulletinBoardDto update(Long id, BulletinBoardForm boardForm) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
-        log.info("bulletinBoard = {}", board.toString());
         if (isNotSame(boardForm.getPassword(), board.getPassword())) {
             return null;
         }
 
         board.update(boardForm);
-        log.info("bulletinBoard = {}", board.toString());
         return new BulletinBoardDto(board);
     }
 
