@@ -2,6 +2,7 @@ package com.sparta.springweekone.bulletinboard.controller;
 
 import com.sparta.springweekone.bulletinboard.domain.BulletinBoardService;
 import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
+import com.sparta.springweekone.bulletinboard.dto.ResultDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,8 +47,8 @@ public class BulletinBoardController {
     }
     // 선택 게시글 삭제
     @DeleteMapping("/bulletin-board/{id}")
-    public String remove(@PathVariable Long id, @RequestBody BulletinBoardDto bulletinBoardDto) {
-        bulletinBoardService.delete(id, bulletinBoardDto);
-        return "success";
+    public ResultDto remove(@PathVariable Long id, @RequestBody BulletinBoardDto bulletinBoardDto) {
+        ResultDto result = bulletinBoardService.delete(id, bulletinBoardDto);
+        return result;
     }
 }
