@@ -1,5 +1,5 @@
 package com.sparta.springweekone.bulletinboard.domain;
-import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
+import com.sparta.springweekone.bulletinboard.dto.BulletinBoardForm;
 import com.sparta.springweekone.bulletinboard.dto.ResultDto;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -21,26 +21,22 @@ public class BulletinBoardService {
         this.bulletinBoardRepository = bulletinBoardRepository;
     }
 
-    public BulletinBoardDto create(BulletinBoardDto bulletinBoardDto) {
+    public BulletinBoardForm create(BulletinBoardForm boardForm) {
         log.info("BulletinBoardService - write");
-        BulletinBoard bulletinBoard = new BulletinBoard(
-                bulletinBoardDto.getNickname(),
-                bulletinBoardDto.getPassword(),
-                bulletinBoardDto.getTitle(),
-                bulletinBoardDto.getMainText());
+        BulletinBoard board = new BulletinBoard(boardForm);
 
-        bulletinBoardRepository.save(bulletinBoard);
-        return bulletinBoardDto;
+        bulletinBoardRepository.save(board);
+        return boardForm;
 
     }
-    public List<BulletinBoardDto> readAll() {
+    public List<BulletinBoardForm> readAll() {
         Sort sort = Sort.by("datetime").descending();
         List<BulletinBoard> boards = bulletinBoardRepository.findAll(sort);
 
-        ArrayList<BulletinBoardDto> bulletinBoardDtos = new ArrayList<>();
+        ArrayList<BulletinBoardForm> bulletinBoardDtos = new ArrayList<>();
 
         Stream<BulletinBoard> stream = boards.stream();
-        stream.forEach(board -> bulletinBoardDtos.add(new BulletinBoardDto(
+        stream.forEach(board -> bulletinBoardDtos.add(new BulletinBoardForm(
                 board.getTitle(),
                 board.getMainText(),
                 board.getNickname())));
@@ -48,13 +44,13 @@ public class BulletinBoardService {
         return bulletinBoardDtos;
     }
 
-    public BulletinBoardDto readOne(Long id) {
+    public BulletinBoardForm readOne(Long id) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
-        BulletinBoardDto boardDto = new BulletinBoardDto(board.getTitle(), board.getMainText(), board.getNickname());
+        BulletinBoardForm boardDto = new BulletinBoardForm(board.getTitle(), board.getMainText(), board.getNickname());
 
         return boardDto;
     }
-    public ResultDto delete(Long id, BulletinBoardDto bulletinBoardDto) {
+    public ResultDto delete(Long id, BulletinBoardForm bulletinBoardDto) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
         log.info("db password = {}", board.getPassword());
         log.info("input password = {}", bulletinBoardDto);
@@ -68,7 +64,7 @@ public class BulletinBoardService {
 
     }
     @Transactional
-    public BulletinBoardDto update(Long id, BulletinBoardDto bulletinBoardDto) {
+    public BulletinBoardForm update(Long id, BulletinBoardForm bulletinBoardDto) {
         BulletinBoard bulletinBoard = bulletinBoardRepository.findById(id).orElseThrow();
         log.info("bulletinBoard = {}", bulletinBoard.toString());
         if (!isCorrectPassword(bulletinBoardDto, bulletinBoard)) {
@@ -77,11 +73,11 @@ public class BulletinBoardService {
 
         bulletinBoard.update(bulletinBoardDto);
         log.info("bulletinBoard = {}", bulletinBoard.toString());
-        BulletinBoardDto boardDto = new BulletinBoardDto(bulletinBoard.getTitle(), bulletinBoard.getNickname(), bulletinBoard.getMainText());
+        BulletinBoardForm boardDto = new BulletinBoardForm(bulletinBoard.getTitle(), bulletinBoard.getNickname(), bulletinBoard.getMainText());
         return boardDto;
     }
 
-    private static boolean isCorrectPassword(BulletinBoardDto bulletinBoardDto, BulletinBoard board) {
+    private static boolean isCorrectPassword(BulletinBoardForm bulletinBoardDto, BulletinBoard board) {
         return board.getPassword().equals(bulletinBoardDto.getPassword());
     }
 
