@@ -1,6 +1,6 @@
 package com.sparta.springweekone.bulletinboard.domain;
 
-import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
+import com.sparta.springweekone.bulletinboard.dto.BulletinBoardForm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,14 +25,15 @@ public class BulletinBoard extends Timestamped {
     @Column(nullable = false)
     private String mainText;
 
-    public BulletinBoard(String nickname, String password, String title, String mainText) {
-        this.nickname = nickname;
-        this.password = password;
-        this.title = title;
-        this.mainText = mainText;
+
+    public BulletinBoard(BulletinBoardForm boardForm) {
+        this.nickname = boardForm.getNickname();
+        this.password = boardForm.getPassword();
+        this.nickname = boardForm.getNickname();
+        this.mainText = boardForm.getMainText();
     }
 
-    public void update(BulletinBoardDto bulletinBoardDto) {
+    public void update(BulletinBoardForm bulletinBoardDto) {
         this.nickname = bulletinBoardDto.getNickname();
         this.title = bulletinBoardDto.getTitle();
         this.mainText = bulletinBoardDto.getMainText();
