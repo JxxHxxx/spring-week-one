@@ -33,9 +33,18 @@ public class BulletinBoard extends Timestamped {
         this.title = boardForm.getTitle();
     }
 
+    public BulletinBoard(BulletinBoardForm boardForm, String password) {
+        this.password = password;
+        this.nickname = boardForm.getNickname();
+        this.mainText = boardForm.getMainText();
+        this.title = boardForm.getTitle();
+    }
+
+
     public void update(BulletinBoardForm bulletinBoardDto) {
         this.nickname = bulletinBoardDto.getNickname();
         this.title = bulletinBoardDto.getTitle();
         this.mainText = bulletinBoardDto.getMainText();
     }
+
 }

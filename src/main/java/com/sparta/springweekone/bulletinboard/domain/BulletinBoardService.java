@@ -1,6 +1,7 @@
 package com.sparta.springweekone.bulletinboard.domain;
 import com.sparta.springweekone.bulletinboard.dto.*;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
+import com.sparta.springweekone.encode.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,23 +20,22 @@ import java.util.stream.Stream;
 public class BulletinBoardService {
 
     private final BulletinBoardRepository bulletinBoardRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public BulletinBoardService(BulletinBoardRepository bulletinBoardRepository) {
+    public BulletinBoardService(BulletinBoardRepository bulletinBoardRepository, PasswordEncoder passwordEncoder) {
         this.bulletinBoardRepository = bulletinBoardRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public BulletinBoardDto create(BulletinBoardForm boardForm) {
-        log.info("BulletinBoardService - write");
-        BulletinBoard board = new BulletinBoard(boardForm);
+        String encryptedPassword = passwordEncoder.encrypt(boardForm.getPassword());
+        BulletinBoard board = new BulletinBoard(boardForm, encryptedPassword);
         BulletinBoard saveBoard = bulletinBoardRepository.save(board);
 
         return new BulletinBoardDto(saveBoard);
 
     }
     public List<BulletinBoardDto> readAll() {
-//        Sort sort = Sort.by("modifiedAt").descending();
-//        List<BulletinBoard> boards = bulletinBoardRepository.findAll(sort);
-
         List<BulletinBoard> boards = bulletinBoardRepository.findAllByOrderByCreateAtDesc();
 
         ArrayList<BulletinBoardDto> boardDtoList = new ArrayList<>();
@@ -93,8 +93,9 @@ public class BulletinBoardService {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
-    private static boolean isNotSame(String passwordOfDto, String passwordOfEntity) {
-        return !passwordOfEntity.equals(passwordOfDto);
+    private boolean isNotSame(String passwordOfDto, String passwordOfEntity) {
+        String encryptedPassword = passwordEncoder.encrypt(passwordOfDto);
+        return !passwordOfEntity.equals(encryptedPassword);
     }
 
 }
