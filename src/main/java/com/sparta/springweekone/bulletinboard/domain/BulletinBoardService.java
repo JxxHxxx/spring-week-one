@@ -33,7 +33,7 @@ public class BulletinBoardService {
 //        Sort sort = Sort.by("modifiedAt").descending();
 //        List<BulletinBoard> boards = bulletinBoardRepository.findAll(sort);
 
-        List<BulletinBoard> boards = bulletinBoardRepository.findAllByoOrderBOrderByCreateAtDesc();
+        List<BulletinBoard> boards = bulletinBoardRepository.findAllByOrderByCreateAtDesc();
 
         ArrayList<BulletinBoardDto> boardDtoList = new ArrayList<>();
 
