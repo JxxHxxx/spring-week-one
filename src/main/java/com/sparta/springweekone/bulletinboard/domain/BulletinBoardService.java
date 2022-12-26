@@ -1,9 +1,10 @@
 package com.sparta.springweekone.bulletinboard.domain;
+import com.sparta.springweekone.bulletinboard.dto.BulletinBoardDto;
 import com.sparta.springweekone.bulletinboard.dto.BulletinBoardForm;
+import com.sparta.springweekone.bulletinboard.dto.PasswordDto;
 import com.sparta.springweekone.bulletinboard.dto.ResultDto;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,12 @@ public class BulletinBoardService {
         this.bulletinBoardRepository = bulletinBoardRepository;
     }
 
-    public BulletinBoardForm create(BulletinBoardForm boardForm) {
+    public BulletinBoardDto create(BulletinBoardForm boardForm) {
         log.info("BulletinBoardService - write");
         BulletinBoard board = new BulletinBoard(boardForm);
+        BulletinBoard saveBoard = bulletinBoardRepository.save(board);
 
-        bulletinBoardRepository.save(board);
-        return boardForm;
+        return new BulletinBoardDto(saveBoard);
 
     }
     public List<BulletinBoardDto> readAll() {
@@ -43,9 +44,9 @@ public class BulletinBoardService {
         return boardDtoList;
     }
 
-    public BulletinBoardForm readOne(Long id) {
+    public BulletinBoardDto readOne(Long id) {
         BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
-        BulletinBoardForm boardDto = new BulletinBoardForm(board.getTitle(), board.getMainText(), board.getNickname());
+        BulletinBoardDto boardDto = new BulletinBoardDto(board);
 
         return boardDto;
     }
@@ -61,9 +62,8 @@ public class BulletinBoardService {
 
     }
 
-    private static boolean isNotCorrectPasswd(PasswordDto passwordDto, BulletinBoard board) {
-        return !board.getPassword().equals(passwordDto.getPassword());
-    }
+
+
     @Transactional
     public BulletinBoardForm update(Long id, BulletinBoardForm bulletinBoardDto) {
         BulletinBoard bulletinBoard = bulletinBoardRepository.findById(id).orElseThrow();
@@ -72,10 +72,9 @@ public class BulletinBoardService {
             return null;
         }
 
-        bulletinBoard.update(bulletinBoardDto);
-        log.info("bulletinBoard = {}", bulletinBoard.toString());
-        BulletinBoardForm boardDto = new BulletinBoardForm(bulletinBoard.getTitle(), bulletinBoard.getNickname(), bulletinBoard.getMainText());
-        return boardDto;
+        board.update(boardForm);
+        log.info("bulletinBoard = {}", board.toString());
+        return new BulletinBoardDto(board);
     }
 
     private static boolean isCorrectPassword(BulletinBoardForm bulletinBoardDto, BulletinBoard board) {
