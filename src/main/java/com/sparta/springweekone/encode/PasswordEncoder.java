@@ -21,12 +21,6 @@ public class PasswordEncoder {
         }
     }
 
-    private PasswordEncoder() {
-    }
-    public static PasswordEncoder getInstance() {
-        return new PasswordEncoder();
-    }
-
     public String encrypt(String confidential) {
         messageDigest.update(confidential.getBytes());
         byte[] bytes = messageDigest.digest();

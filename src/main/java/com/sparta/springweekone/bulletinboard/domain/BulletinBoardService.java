@@ -2,6 +2,7 @@ package com.sparta.springweekone.bulletinboard.domain;
 import com.sparta.springweekone.bulletinboard.dto.*;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
 import com.sparta.springweekone.encode.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,19 +18,17 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BulletinBoardService {
 
     private final BulletinBoardRepository bulletinBoardRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
-    public BulletinBoardService(BulletinBoardRepository bulletinBoardRepository, PasswordEncoder passwordEncoder) {
-        this.bulletinBoardRepository = bulletinBoardRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public BulletinBoardDto create(BulletinBoardForm boardForm) {
-        String encryptedPassword = passwordEncoder.encrypt(boardForm.getPassword());
-        BulletinBoard board = new BulletinBoard(boardForm, encryptedPassword);
+//        String encryptedPassword = passwordEncoder.encrypt(boardForm.getPassword());
+
+        BulletinBoard board = new BulletinBoard(boardForm, boardForm.getPassword());
         BulletinBoard saveBoard = bulletinBoardRepository.save(board);
 
         return new BulletinBoardDto(saveBoard);
@@ -47,7 +46,9 @@ public class BulletinBoardService {
     }
 
     public BulletinBoardDto readOne(Long id) {
-        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
+        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+        );
         BulletinBoardDto boardDto = new BulletinBoardDto(board);
 
         return boardDto;
@@ -94,8 +95,8 @@ public class BulletinBoardService {
     }
 
     private boolean isNotSame(String passwordOfDto, String passwordOfEntity) {
-        String encryptedPassword = passwordEncoder.encrypt(passwordOfDto);
-        return !passwordOfEntity.equals(encryptedPassword);
+//        String encryptedPassword = passwordEncoder.encrypt(passwordOfDto);
+        return !passwordOfEntity.equals(passwordOfDto);
     }
 
 }

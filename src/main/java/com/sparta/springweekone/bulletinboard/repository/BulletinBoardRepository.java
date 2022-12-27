@@ -11,4 +11,5 @@ import java.util.List;
 public interface BulletinBoardRepository extends JpaRepository<BulletinBoard, Long> {
 
     List<BulletinBoard> findAllByOrderByCreateAtDesc();
+    BulletinBoard findByNickname(String nickname);
 }
