@@ -1,9 +1,8 @@
 package com.sparta.springweekone.bulletinboard.domain;
 
 import com.sparta.springweekone.bulletinboard.dto.*;
+import com.sparta.springweekone.bulletinboard.entity.BulletinBoard;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
-import com.sparta.springweekone.encode.PasswordEncoder;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,15 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.*;
 
-@Slf4j
 @SpringBootTest
 class BulletinBoardServiceTest {
 
@@ -36,13 +32,10 @@ class BulletinBoardServiceTest {
 
         bulletinBoardService.create(bulletinBoardForm1);
         bulletinBoardService.create(bulletinBoardForm2);
-        log.info("beforeEach 실행");
     }
     @AfterEach
     void afterEach() {
         bulletinBoardRepository.deleteAll();
-        log.info("afterEach 실행");
-
     }
 
     @DisplayName("게시글은 고유한 ID를 가져야 합니다.")
@@ -52,7 +45,6 @@ class BulletinBoardServiceTest {
         List<BulletinBoardDto> boardDtoList = bulletinBoardService.readAll();
 
         assertThat(boardDtoList.get(0).getId()).isNotEqualTo(boardDtoList.get(1).getId());
-
     }
 
     @DisplayName("게시글을 저장할 수 있습니다.")
@@ -70,7 +62,7 @@ class BulletinBoardServiceTest {
         BulletinBoard findBoard = bulletinBoardRepository.findByNickname("자몽");
 
         BulletinBoardForm updateForm = new BulletinBoardForm("123a","자기소개2","안녕 나는 자몽","자몽");
-        bulletinBoardService.updateV2(findBoard.getId(), updateForm);
+        bulletinBoardService.update(findBoard.getId(), updateForm);
 
         BulletinBoard updateBoard = bulletinBoardRepository.findByNickname("자몽");
 
@@ -85,9 +77,9 @@ class BulletinBoardServiceTest {
         //비밀번호가 틀린 경우
         BulletinBoardForm updateForm = new BulletinBoardForm("12123123","자기소개2","안녕 나는 자몽","자몽");
 
-        ResponseEntity<Message> responseEntity = bulletinBoardService.updateV2(findBoard.getId(), updateForm);
+        Message message = bulletinBoardService.update(findBoard.getId(), updateForm);
 
-        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(UNAUTHORIZED);
+        Assertions.assertThat(message.getSuccess()).isEqualTo(false);
 
         BulletinBoard updateBoard = bulletinBoardRepository.findByNickname("자몽");
         Assertions.assertThat(updateBoard.getTitle()).isEqualTo("자기소개");
@@ -116,6 +108,5 @@ class BulletinBoardServiceTest {
         Assertions.assertThat(result.isSuccess()).isFalse();
 
         Assertions.assertThat(findBoard.getNickname()).isEqualTo("자몽");
-
     }
 }
