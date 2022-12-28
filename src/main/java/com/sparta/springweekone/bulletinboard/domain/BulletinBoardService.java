@@ -1,7 +1,6 @@
 package com.sparta.springweekone.bulletinboard.domain;
 import com.sparta.springweekone.bulletinboard.dto.*;
 import com.sparta.springweekone.bulletinboard.repository.BulletinBoardRepository;
-import com.sparta.springweekone.encode.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -12,9 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,12 +35,7 @@ public class BulletinBoardService {
     public List<BulletinBoardDto> readAll() {
         List<BulletinBoard> boards = bulletinBoardRepository.findAllByOrderByCreateAtDesc();
 
-        ArrayList<BulletinBoardDto> boardDtoList = new ArrayList<>();
-
-        Stream<BulletinBoard> stream = boards.stream();
-        stream.forEach(board -> boardDtoList.add(new BulletinBoardDto(board)));
-
-        return boardDtoList;
+        return boards.stream().map(bulletinBoard -> new BulletinBoardDto(bulletinBoard)).collect(Collectors.toList());
     }
 
     public BulletinBoardDto readOne(Long id) {
