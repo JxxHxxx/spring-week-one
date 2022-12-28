@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -35,8 +37,14 @@ public class BulletinBoardController {
 
     // 선택 게시글 수정
     @PatchMapping("/bulletin-boards/{id}")
-    public ResponseEntity<Message> updateV2(@PathVariable Long id, @RequestBody BulletinBoardForm boardForm) {
-        return bulletinBoardService.updateV2(id, boardForm);
+    public ResponseEntity<Message> update(@PathVariable Long id, @RequestBody BulletinBoardForm boardForm) {
+        Message message = bulletinBoardService.update(id, boardForm);
+
+        if (message.getSuccess() == false) {
+            return new ResponseEntity<>(message, UNAUTHORIZED);
+        }
+
+        return new ResponseEntity<>(message, OK);
     }
 
     // 선택 게시글 삭제
