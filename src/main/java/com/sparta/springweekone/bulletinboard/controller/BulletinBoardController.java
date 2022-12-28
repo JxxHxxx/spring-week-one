@@ -3,7 +3,6 @@ package com.sparta.springweekone.bulletinboard.controller;
 import com.sparta.springweekone.bulletinboard.domain.BulletinBoardService;
 import com.sparta.springweekone.bulletinboard.dto.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
