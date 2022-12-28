@@ -29,15 +29,13 @@ public class BulletinBoardService {
     }
 
     public BulletinBoardDto readOne(Long id) {
-        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
-        );
+        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
         return new BulletinBoardDto(board);
     }
 
     public ResultDto delete(Long id, PasswordDto passwordDto) {
-        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
+        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
         if (isNotSame(passwordDto.getPassword(), board.getPassword())) {
             return new ResultDto(false);
@@ -49,7 +47,7 @@ public class BulletinBoardService {
 
     @Transactional
     public Message update(Long id, BulletinBoardForm boardForm) {
-        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow();
+        BulletinBoard board = bulletinBoardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
         if (isNotSame(boardForm.getPassword(), board.getPassword())) {
             return new Message(false, null);
