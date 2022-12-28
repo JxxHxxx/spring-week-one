@@ -11,7 +11,6 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class BulletinBoardController {
