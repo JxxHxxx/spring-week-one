@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,7 @@ public class BulletinBoardService {
     private final BulletinBoardRepository bulletinBoardRepository;
 
     public BulletinBoardDto create(BulletinBoardForm boardForm) {
-        BulletinBoard board = new BulletinBoard(boardForm, boardForm.getPassword());
+        BulletinBoard board = new BulletinBoard(boardForm);
         BulletinBoard saveBoard = bulletinBoardRepository.save(board);
 
         return new BulletinBoardDto(saveBoard);
