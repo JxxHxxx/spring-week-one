@@ -1,4 +1,4 @@
-package com.sparta.springweekone.bulletinboard.domain;
+package com.sparta.springweekone.bulletinboard.entity;
 
 import com.sparta.springweekone.bulletinboard.dto.BulletinBoardForm;
 import lombok.Getter;

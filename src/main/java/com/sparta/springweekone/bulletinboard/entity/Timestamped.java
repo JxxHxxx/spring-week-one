@@ -1,4 +1,4 @@
-package com.sparta.springweekone.bulletinboard.domain;
+package com.sparta.springweekone.bulletinboard.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

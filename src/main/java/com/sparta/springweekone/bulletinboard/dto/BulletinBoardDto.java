@@ -1,6 +1,6 @@
 package com.sparta.springweekone.bulletinboard.dto;
 
-import com.sparta.springweekone.bulletinboard.domain.BulletinBoard;
+import com.sparta.springweekone.bulletinboard.entity.BulletinBoard;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
